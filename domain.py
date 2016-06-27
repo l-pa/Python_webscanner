@@ -80,9 +80,12 @@ def get_remote_ports(url):
 
 
 def read_robots_txt(url):
-    with urllib.request.urlopen("http://"+url+"/robots.txt") as url:
-        s = url.read()
-    pprint(s)
+    try:
+        with urllib.request.urlopen("http://"+url+"/robots.txt") as url:
+            s = url.read()
+        pprint(s)
+    except socket.error:
+        print("No connection .. Robots.txt")
 
 
 def whos_lookup(url):
