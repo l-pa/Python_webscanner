@@ -1,15 +1,20 @@
 from directory import *
 from domain import *
+from gui import printSpaceText
 
-if __name__ == "__main__":
+def main():
     print("Type website : ")
     website = input()
     get_remote_ports(website)
-    print("-" * 60)
-    print("Robots.txt : ")
-    print("-" * 60)
-    #read_robots_txt(website)
-    print("-" * 60)
-    print("Who is : ")
-    print("-" * 60)
+
+    printSpaceText("Robots.txt : ")
+
+    read_robots_txt(website)
+
+    printSpaceText("Whos : ")
+
     whos_lookup(website)
+
+
+if __name__ == "__main__":
+    main()

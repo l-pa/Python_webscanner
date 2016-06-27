@@ -2,11 +2,11 @@ from tld import get_tld
 import socket
 import subprocess
 import sys
-import io
 import urllib.request
 from ipwhois import IPWhois
 from datetime import datetime
 from pprint import pprint
+from gui import printSpaceText
 
 
 def get_ip_address(url):
@@ -30,9 +30,7 @@ def get_remote_ports(url):
         print(ip_address)
         remote_server_ip = ip_address
 
-        print("-" * 60)
         print("Please wait, scanning remote host", remote_server_ip)
-        print("-" * 60)
 
         t1 = datetime.now()
         print("Start port : ")
@@ -81,10 +79,10 @@ def get_remote_ports(url):
         print("%s: %s" % (url, err_msg))
 
 
-#def read_robots_txt(url):
-#    req = urllib.request.urlopen("www." +url + "/robots.txt", data=None)
-#    data = io.TextIOWrapper(req, encoding='utf-8')
-#    return data.read()
+def read_robots_txt(url):
+    with urllib.request.urlopen("http://"+url+"/robots.txt") as url:
+        s = url.read()
+    pprint(s)
 
 
 def whos_lookup(url):
@@ -93,4 +91,4 @@ def whos_lookup(url):
         results = obj.lookup_rdap(depth=1)
         pprint(results)
     except socket.error:
-        print("Error")
+        print("Error no connection .. WHOS")
