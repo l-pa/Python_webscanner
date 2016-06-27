@@ -54,3 +54,10 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml 
 # *.ipr
+.idea/.name
+.idea/modules.xml
+__pycache__/directory.cpython-35.pyc
+__pycache__/domain.cpython-35.pyc
+.idea/misc.xml
+.idea/encodings.xml
+.idea/WebsiteScanner.iml
