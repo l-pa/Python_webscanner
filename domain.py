@@ -37,7 +37,7 @@ def get_remote_ports(url):
         port_one = input()
         print("End port : ")
         port_sec = input()
-        if port_one == port_sec:
+        if port_one == port_sec: #ARG
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             result = sock.connect_ex((remote_server_ip, int(port_one)))
             if result == 0:
@@ -45,7 +45,7 @@ def get_remote_ports(url):
             else:
                 print("Port {}: 	 Close".format(port_one))
                 sock.close()
-        else:
+        else: #ARG
             try:
                 for port in range(int(port_one), int(port_sec)):
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
