@@ -138,7 +138,6 @@ def main():
 
     Gui.print_space_text("Telnet : #WIP")
 
-    Telnet.connect_to()
 
 
 if __name__ == "__main__":
