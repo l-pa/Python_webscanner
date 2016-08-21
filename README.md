@@ -10,4 +10,7 @@
 * tld
 * ipwhois
 
-
+### ToDo
+* Output to file
+* Telnet
+* Cisco CDP / LLDP (Not sure)
