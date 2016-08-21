@@ -2,14 +2,18 @@ import telnetlib
 import ipaddress
 import socket
 import subprocess
-import sys
+import sys, argparse, os
 import urllib.request
 from tld import get_tld
 from ipwhois import IPWhois
 from datetime import datetime
 from pprint import pprint
 
+
 class Gui:
+    def start_text():
+        Gui.print_space_text('Simple web scanner')
+        print('Website: (google.com)')
     def print_space_text(text):
         print("-" * 60)
         print(text)
@@ -17,30 +21,26 @@ class Gui:
 
 
 class DomainCheck:
-    ip = 0
+    def __init__(self, website):
+        print("Type website : ")
+        DomainCheck.get_remote_ports(website)
+        Gui.print_space_text("Robots.txt : ")
+        DomainCheck.read_robots_txt(website)
+        Gui.print_space_text("Whos : ")
+        DomainCheck.whos_lookup(website)
+        Gui.print_space_text("Telnet : #WIP")
 
+    @staticmethod
     def get_ip_address(url):
         ip_address = socket.gethostbyname(url)
-        ip = ip_address
         return ip_address
 
-    # def get_domain_name(url):
-    #     try:
-    #        domain_name = get_tld(url)
-    #     except ValueError:
-    #         print("Probabbly bad URL")
-    #         staticURL = url
-    #    return domain_name
-
-
     def get_remote_ports(url):
-
         try:
             ip_address = DomainCheck.get_ip_address(url)
             print(ip_address)
-            remote_server_ip = ip_address
 
-            print("Please wait, scanning remote host", remote_server_ip)
+            print("Please wait, scanning remote host", ip_address)
 
             t1 = datetime.now()
             print("Start port : ")
@@ -49,7 +49,7 @@ class DomainCheck:
             port_sec = input()
             if port_one == port_sec:  # ARG
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                result = sock.connect_ex((remote_server_ip, int(port_one)))
+                result = sock.connect_ex((ip_address, int(port_one)))
                 if result == 0:
                     print("Port {}: 	 Open".format(port_one))
                 else:
@@ -59,7 +59,7 @@ class DomainCheck:
                 try:
                     for port in range(int(port_one), int(port_sec)):
                         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                        result = sock.connect_ex((remote_server_ip, port))
+                        result = sock.connect_ex((ip_address, port))
 
                         if result == 0:
                             print("Port {}: 	 Open".format(port))
@@ -106,7 +106,6 @@ class DomainCheck:
 
 
 class Folder:
-
     def create_dir(self, directory):
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -123,22 +122,16 @@ class Telnet:
         telnet = telnetlib.Telnet(host)
         print(telnet.read_all())
 
-def main():
-    print("Type website : ")
-    website = input()
-    DomainCheck.get_remote_ports(website)
-
-    Gui.print_space_text("Robots.txt : ")
-
-    DomainCheck.read_robots_txt(website)
-
-    Gui.print_space_text("Whos : ")
-
-    DomainCheck.whos_lookup(website)
-
-    Gui.print_space_text("Telnet : #WIP")
-
-
 
 if __name__ == "__main__":
-    main()
+    # parser = argparse.ArgumentParser(description="Simple web scan")
+    # parser.add_argument('-w', action)
+    # args = parser.parse_args()
+    # if args.:
+    #     print("1")
+    # else:
+    #     print('2')
+
+    Gui.start_text()
+    DomainCheck(input())
+    print('Output to txt #WIP')
