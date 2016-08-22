@@ -13,7 +13,7 @@ from pprint import pprint
 class Gui:
     def start_text():
         Gui.print_space_text('Simple web scanner')
-        print('Website: (google.com)')
+        print('Website:  (ex. google.com)')
     def print_space_text(text):
         print("-" * 60)
         print(text)
@@ -22,7 +22,6 @@ class Gui:
 
 class DomainCheck:
     def __init__(self, website):
-        print("Type website : ")
         DomainCheck.get_remote_ports(website)
         Gui.print_space_text("Robots.txt : ")
         DomainCheck.read_robots_txt(website)
@@ -38,7 +37,7 @@ class DomainCheck:
     def get_remote_ports(url):
         try:
             ip_address = DomainCheck.get_ip_address(url)
-            print(ip_address)
+            Gui.print_space_text('IP address ' + ip_address)
 
             print("Please wait, scanning remote host", ip_address)
 
@@ -92,7 +91,8 @@ class DomainCheck:
         try:
             with urllib.request.urlopen("http://" + url + "/robots.txt") as url:
                 s = url.read()
-            pprint(s)
+                for x in s.split():
+                    print (x)
         except socket.error:
             print("No connection .. Robots.txt")
 
