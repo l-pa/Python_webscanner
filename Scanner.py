@@ -91,7 +91,7 @@ class DomainCheck:
         try:
             with urllib.request.urlopen("http://" + url + "/robots.txt") as url:
                 s = url.read()
-                for x in s.split():
+                for x in s.splitlines():
                     print (x)
         except socket.error:
             print("No connection .. Robots.txt")
