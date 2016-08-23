@@ -11,6 +11,6 @@
 * ipwhois
 
 ### ToDo
-* Output to file
+* Output to file (.... > fileName.txt)
 * Telnet
 * Cisco CDP / LLDP (Not sure)
