@@ -1,10 +1,6 @@
-import telnetlib
-import ipaddress
 import socket
-import subprocess
-import sys, argparse, os
+import sys
 import urllib.request
-from tld import get_tld
 from ipwhois import IPWhois
 from datetime import datetime
 from pprint import pprint
@@ -38,7 +34,6 @@ class DomainCheck:
         try:
             ip_address = DomainCheck.get_ip_address(url)
             Gui.print_space_text('IP address ' + ip_address)
-
             print("Please wait, scanning remote host", ip_address)
 
             t1 = datetime.now()
@@ -54,7 +49,7 @@ class DomainCheck:
                 else:
                     print("Port {}: 	 Close".format(port_one))
                     sock.close()
-            else:  # ARG
+            else:
                 try:
                     for port in range(int(port_one), int(port_sec)):
                         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -105,22 +100,17 @@ class DomainCheck:
             print("Error no connection .. WHOS")
 
 
-class Folder:
-    def create_dir(self, directory):
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+class TextFile:
 
-    def write_file(self, path, data):
-        f = open(path, 'w')
-        f.write(data)
-        f.close()
+    def write_file(data):
+        pass
 
 
 class Telnet:
-    def connect_to(self):
-        host = ipaddress.ip_address('192.168.1.1', 21)
-        telnet = telnetlib.Telnet(host)
-        print(telnet.read_all())
+    def connect_telnet(self, ip,port):
+        pass
+    def read_telnet(self):
+        pass
 
 
 if __name__ == "__main__":
@@ -134,4 +124,3 @@ if __name__ == "__main__":
 
     Gui.start_text()
     DomainCheck(input())
-    print('Output to txt #WIP')
