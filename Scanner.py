@@ -2,14 +2,25 @@ import socket
 import sys
 import urllib.request
 from ipwhois import IPWhois
-from datetime import datetime
+from datetime import datetime, time
 from pprint import pprint
+import argparse
+from subprocess import call
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--destination", type=str, help="Type website (ex. google.com)")
+parser.add_argument("-o", "--output", help="Output to file", action='store_true')
+parser.add_argument("-t", "--telnet", action='store_true', help="Telnet")
+parser.add_argument("-p", "--ports", type=str, help="Port range (20,21,22 ...)")
+parser.add_argument("-s", "--silent", action='store_true', help="Silent mode")
+
+args = parser.parse_args()
 
 
 class Gui:
     def start_text():
-        Gui.print_space_text('Simple web scanner')
-        print('Website:  (ex. google.com)')
+        Gui.print_space_text('Simple web scanner \n -d Web/IP -p ports 80,21,20...')
+
     def print_space_text(text):
         print("-" * 60)
         print(text)
@@ -17,61 +28,35 @@ class Gui:
 
 
 class DomainCheck:
-    def __init__(self, website):
-        DomainCheck.get_remote_ports(website)
+    def __init__(self, website, ports):
+        DomainCheck.get_remote_ports(website, ports)
         Gui.print_space_text("Robots.txt : ")
         DomainCheck.read_robots_txt(website)
         Gui.print_space_text("Whos : ")
         DomainCheck.whos_lookup(website)
-        Gui.print_space_text("Telnet : #WIP")
 
     @staticmethod
     def get_ip_address(url):
         ip_address = socket.gethostbyname(url)
         return ip_address
 
-    def get_remote_ports(url):
+    def get_remote_ports(url, ports):
         try:
             ip_address = DomainCheck.get_ip_address(url)
             Gui.print_space_text('IP address ' + ip_address)
             print("Please wait, scanning remote host", ip_address)
 
             t1 = datetime.now()
-            print("Start port : ")
-            port_one = input()
-            print("End port : ")
-            port_sec = input()
-            if port_one == port_sec:  # ARG
+            for port in ports:
+                print(port)
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                result = sock.connect_ex((ip_address, int(port_one)))
+                result = sock.connect_ex((ip_address, int(port)))
+
                 if result == 0:
-                    print("Port {}: 	 Open".format(port_one))
+                    print("Port {}: 	 Open".format(port))
                 else:
-                    print("Port {}: 	 Close".format(port_one))
+                    print("Port {}: 	 Close".format(port))
                     sock.close()
-            else:
-                try:
-                    for port in range(int(port_one), int(port_sec)):
-                        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                        result = sock.connect_ex((ip_address, port))
-
-                        if result == 0:
-                            print("Port {}: 	 Open".format(port))
-                        else:
-                            print("Port {}: 	 Close".format(port))
-                        sock.close()
-
-                except KeyboardInterrupt:
-                    print("You pressed Ctrl+C")
-                    sys.exit()
-
-                except socket.gaierror:
-                    print('Hostname could not be resolved. Exiting')
-                    sys.exit()
-
-                except socket.error:
-                    print("Couldn't connect to server")
-                    sys.exit()
 
                 t2 = datetime.now()
 
@@ -87,7 +72,7 @@ class DomainCheck:
             with urllib.request.urlopen("http://" + url + "/robots.txt") as url:
                 s = url.read()
                 for x in s.splitlines():
-                    print (x)
+                    print(x)
         except socket.error:
             print("No connection .. Robots.txt")
 
@@ -99,28 +84,38 @@ class DomainCheck:
         except socket.error:
             print("Error no connection .. WHOS")
 
-
-class TextFile:
-
-    def write_file(data):
-        pass
+class FileIO:
+    def domain_check_to_file(self, website):
+        DomainCheck.get_remote_ports(website)
+        Gui.print_space_text("Robots.txt : ")
+        DomainCheck.read_robots_txt(website)
+        Gui.print_space_text("Whos : ")
+        DomainCheck.whos_lookup(website)
 
 
 class Telnet:
-    def connect_telnet(self, ip,port):
+    def connect_telnet(self, ip, port):
         pass
+
     def read_telnet(self):
         pass
 
 
 if __name__ == "__main__":
-    # parser = argparse.ArgumentParser(description="Simple web scan")
-    # parser.add_argument('-w', action)
-    # args = parser.parse_args()
-    # if args.:
-    #     print("1")
-    # else:
-    #     print('2')
-
     Gui.start_text()
-    DomainCheck(input())
+
+    if args.ports:
+        ports = args.ports.split(',')
+        ports = list(map(int, ports))
+        print(ports)
+        DomainCheck(args.destination, ports)
+
+    if args.output:
+        sys.stdout = open("Output.txt", "a")
+        DomainCheck(args.destination, ports)
+        sys.stdout.close()
+
+    if args.telnet:
+        print("WIP")
+
+    # print("Use -h --help")
