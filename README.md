@@ -1,6 +1,6 @@
 ## Usage: python Scaner.py -d google.com -p 22,80...
 
-#**[For detailed usage use Wiki](https://github.com/Delfyn/Python_webscanner/wiki)**#
+###**[For detailed usage use Wiki](https://github.com/Delfyn/Python_webscanner/wiki)**###
 
 ### Scan:
 * IP adress
