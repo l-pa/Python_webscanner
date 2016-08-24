@@ -1,17 +1,17 @@
-## Usage: python Scaner.py
+## Usage: python Scaner.py -d google.com -p 22,80...
 
 ### Scan:
 * IP adress
 * Robots
 * Whos
 * WIP Telnet
+* Text output
+* Port range
 
 ### Dependencies:
 * tld
 * ipwhois
 
 ### ToDo
-* Array (Poľe)
-* Output to file (.... > fileName.txt)
 * Telnet
 * Cisco CDP / LLDP (Not sure)
