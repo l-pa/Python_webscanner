@@ -1,25 +1,23 @@
-import socket
-import sys
-import urllib.request
+import sys, socket, urllib.request, argparse
 from ipwhois import IPWhois
 from datetime import datetime, time
 from pprint import pprint
-import argparse
-from subprocess import call
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--destination", type=str, help="Type website (ex. google.com)")
 parser.add_argument("-o", "--output", help="Output to file", action='store_true')
 parser.add_argument("-t", "--telnet", action='store_true', help="Telnet")
 parser.add_argument("-p", "--ports", type=str, help="Port range (20,21,22 ...)")
-parser.add_argument("-s", "--silent", action='store_true', help="Silent mode")
+parser.add_argument("-r", "--robots", action='store_true', help="Robots.txt")
+parser.add_argument("-w", "--whois", action='store_true', help="Site WhoIs")
 
 args = parser.parse_args()
 
 
 class Gui:
+    @staticmethod
     def start_text():
-        Gui.print_space_text('Simple web scanner \n -d Web/IP -p ports 80,21,20...')
+        Gui.print_space_text('Simple web scanner \n-d Web/IP -p ports 80,21,20...')
 
     def print_space_text(text):
         print("-" * 60)
@@ -84,14 +82,6 @@ class DomainCheck:
         except socket.error:
             print("Error no connection .. WHOS")
 
-class FileIO:
-    def domain_check_to_file(self, website):
-        DomainCheck.get_remote_ports(website)
-        Gui.print_space_text("Robots.txt : ")
-        DomainCheck.read_robots_txt(website)
-        Gui.print_space_text("Whos : ")
-        DomainCheck.whos_lookup(website)
-
 
 class Telnet:
     def connect_telnet(self, ip, port):
@@ -104,18 +94,23 @@ class Telnet:
 if __name__ == "__main__":
     Gui.start_text()
 
+    if args.output:
+        sys.stdout = open("Output.txt", "a")
+
     if args.ports:
         ports = args.ports.split(',')
         ports = list(map(int, ports))
-        print(ports)
-        DomainCheck(args.destination, ports)
+        print('Port array to scan : ' + str(ports))
+        DomainCheck.get_remote_ports(args.destination, ports)
 
-    if args.output:
-        sys.stdout = open("Output.txt", "a")
-        DomainCheck(args.destination, ports)
-        sys.stdout.close()
+    if args.robots:
+        Gui.print_space_text("Robots")
+        DomainCheck.read_robots_txt(args.destination)
+
+    if args.whois:
+        Gui.print_space_text("WhoIs")
+        DomainCheck.whos_lookup(args.destination)
 
     if args.telnet:
         print("WIP")
 
-    # print("Use -h --help")
