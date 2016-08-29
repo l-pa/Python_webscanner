@@ -1,4 +1,9 @@
-import sys, socket, urllib.request, argparse
+import sys
+import socket
+import urllib.request
+import argparse
+import telnetlib
+
 from ipwhois import IPWhois
 from datetime import datetime, time
 from pprint import pprint
@@ -14,10 +19,10 @@ parser.add_argument("-w", "--whois", action='store_true', help="Site WhoIs")
 args = parser.parse_args()
 
 
-class Gui:
+class Gui(object):
     @staticmethod
     def start_text():
-        Gui.print_space_text('Simple web scanner \n-d Web/IP -p ports 80,21,20...')
+        Gui.print_space_text('Simple web scanner \n-d Web/IP -p ports 21,22,80...')
 
     def print_space_text(text):
         print("-" * 60)
@@ -25,7 +30,7 @@ class Gui:
         print("-" * 60)
 
 
-class DomainCheck:
+class DomainCheck(object):
     def __init__(self, website, ports):
         DomainCheck.get_remote_ports(website, ports)
         Gui.print_space_text("Robots.txt : ")
@@ -83,8 +88,8 @@ class DomainCheck:
             print("Error no connection .. WHOS")
 
 
-class Telnet:
-    def connect_telnet(self, ip, port):
+class Telnet(object):
+    def connect_telnet(port, timeout):
         pass
 
     def read_telnet(self):
@@ -110,7 +115,7 @@ if __name__ == "__main__":
     if args.whois:
         Gui.print_space_text("WhoIs")
         DomainCheck.whos_lookup(args.destination)
+        pass
 
     if args.telnet:
-        print("WIP")
-
+        Telnet.connect_telnet(int(23), int(3))
