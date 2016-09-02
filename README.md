@@ -15,5 +15,4 @@
 * ipwhois
 
 ### ToDo
-* Telnet
 * Cisco CDP / LLDP (Not sure)
